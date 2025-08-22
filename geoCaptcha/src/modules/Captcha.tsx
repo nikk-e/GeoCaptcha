@@ -1,9 +1,42 @@
-const Captcha = () => {
-  return (
-    <div>
-      <p>Captcha Component</p>
-    </div>
-  )
+import React, { useState } from "react";
+
+interface GeoCaptchaProps {
+  location?: string;
 }
 
-export default Captcha
+const Captcha: React.FC<GeoCaptchaProps> = ({ location = "Huutisland" }) => {
+  const [code, setCode] = useState("");
+  const [submitted, setSubmitted] = useState(false);
+
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    setSubmitted(true);
+    // TODO: Validate code with backend
+  };
+
+  return (
+    <div>
+      <h2>GeoCaptcha Challenge</h2>
+      <p>
+        Go to the following location to get your code:
+        <br />
+        <strong>{location}</strong>
+      </p>
+      <form onSubmit={handleSubmit}>
+        <label>
+          Enter code from location:
+          <input
+            type="text"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
+            required
+          />
+        </label>
+        <button type="submit">Submit Code</button>
+      </form>
+      {submitted && <p>Code submitted! (Validation not implemented)</p>}
+    </div>
+  );
+};
+
+export default Captcha;
