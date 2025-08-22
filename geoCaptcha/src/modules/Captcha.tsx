@@ -16,7 +16,6 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ location = "Huutisland" }) => {
 
   return (
     <div>
-      <h2>GeoCaptcha Challenge</h2>
       <p>
         Go to the following location to get your code:
         <br />
