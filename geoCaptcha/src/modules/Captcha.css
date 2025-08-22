@@ -1,0 +1,190 @@
+.captcha-container {
+  max-width: 400px;
+  margin: 20px auto;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  overflow: hidden;
+}
+
+.captcha-header {
+  background: #f8f9fa;
+  border-bottom: 1px solid #e0e0e0;
+  padding: 16px 20px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.captcha-icon {
+  width: 24px;
+  height: 24px;
+  background: #4285f4;
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: bold;
+  font-size: 12px;
+}
+
+.captcha-title {
+  font-size: 16px;
+  font-weight: 500;
+  color: #202124;
+  margin: 0;
+}
+
+.captcha-challenge {
+  padding: 20px;
+}
+
+.challenge-text {
+  font-size: 14px;
+  color: #3c4043;
+  margin: 0 0 16px 0;
+  line-height: 1.4;
+}
+
+.challenge-instruction {
+  font-weight: 500;
+  margin-bottom: 8px;
+}
+
+.map-container {
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: 16px 0;
+}
+
+.input-section {
+  margin-top: 20px;
+}
+
+.code-input-group {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.code-input-label {
+  font-size: 14px;
+  color: #3c4043;
+  font-weight: 500;
+}
+
+.code-input {
+  width: 100%;
+  padding: 12px 16px;
+  border: 1px solid #dadce0;
+  border-radius: 4px;
+  font-size: 14px;
+  font-family: 'Courier New', monospace;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  background: #fff;
+  transition: border-color 0.2s ease;
+}
+
+.code-input:focus {
+  outline: none;
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px rgba(66, 133, 244, 0.2);
+}
+
+.code-input.error {
+  border-color: #ea4335;
+}
+
+.submit-button {
+  width: 100%;
+  margin-top: 16px;
+  padding: 12px 24px;
+  background: #4285f4;
+  color: white;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.submit-button:hover:not(:disabled) {
+  background: #3367d6;
+}
+
+.submit-button:disabled {
+  background: #dadce0;
+  color: #5f6368;
+  cursor: not-allowed;
+}
+
+.status-message {
+  margin-top: 12px;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 13px;
+  font-weight: 500;
+  text-align: center;
+}
+
+.status-success {
+  background: #e8f5e8;
+  color: #137333;
+  border: 1px solid #c6f6c6;
+}
+
+.status-error {
+  background: #fce8e6;
+  color: #d93025;
+  border: 1px solid #f9aeaa;
+}
+
+.captcha-footer {
+  background: #f8f9fa;
+  border-top: 1px solid #e0e0e0;
+  padding: 12px 20px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 12px;
+  color: #5f6368;
+}
+
+.recaptcha-branding {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.refresh-button {
+  background: none;
+  border: none;
+  color: #5f6368;
+  cursor: pointer;
+  padding: 4px;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+}
+
+.refresh-button:hover {
+  background: #e8eaed;
+}
+
+@media (max-width: 480px) {
+  .captcha-container {
+    margin: 10px;
+    max-width: none;
+  }
+  
+  .captcha-header,
+  .captcha-challenge,
+  .captcha-footer {
+    padding: 16px;
+  }
+}

@@ -15,15 +15,29 @@ const Map = ({ lat, lng }: MapProps) => {
     return (
         <MapContainer
             center={center}
-            zoom={16}
-            style={{ height: "400px", width: "100%" }}
+            zoom={17}
+            style={{ 
+                height: "280px", 
+                width: "100%",
+                borderRadius: "4px"
+            }}
+            zoomControl={false}
+            scrollWheelZoom={false}
+            doubleClickZoom={false}
+            dragging={false}
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
                 attribution='&copy; <a href="https://www.openstreetmap.org/">OpenStreetMap</a> contributors'
             />
             <Marker position={center}>
-                <Popup>Target Location</Popup>
+                <Popup>
+                    <div style={{ textAlign: 'center', fontWeight: 'bold' }}>
+                        🎯 Verification Location
+                        <br />
+                        <small>Find the code here</small>
+                    </div>
+                </Popup>
             </Marker>
         </MapContainer>
     );
