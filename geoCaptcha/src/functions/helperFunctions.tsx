@@ -1,12 +1,29 @@
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
 export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<string> {
-  // Here you would typically send the captchaResponse to your server for verification
-  console.log("Captcha answered:", captchaResponse, locationID);
-  fetch('http://localhost:5000/get_captcha')
-  .then(res => res.json())
-  .then(data => console.log(data));
-  return "success";
+  // Send the captchaResponse and locationID to your server for verification
+  try {
+    const response = await fetch('http://localhost:5000/check_captcha', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        captchaResponse,
+        locationID,
+      }),
+    });
+    if (!response.ok) {
+      throw new Error('Network response was not ok');
+    }
+    const data = await response.json();
+    console.log('Captcha check result:', data);
+    // Adjust this depending on your backend's response structure
+    return data.result || "success";
+  } catch (err) {
+    console.error('Error checking captcha:', err);
+    return "error";
+  }
 }
 
 
@@ -16,16 +33,21 @@ export async function login(user: { username: string; password: string; captchaR
   return true;
 }
 
-// Get captcha
-fetch('http://localhost:5000/get_captcha')
-  .then(res => res.json())
-  .then(data => console.log(data));
+export async function getLocation(lon: number, lat: number): Promise<any | null> {
+  // Calls backend to get 1 random coordinate within 5km of the given lat/lon
+  try {
+    const response = await fetch(`http://localhost:5000/get_random_coordinates?lat=${lat}&lon=${lon}`);
+    if (!response.ok) {
+      console.error("Network error or no coordinate found");
+      return null;
+    }
+    const data = await response.json();
+    console.log("Response:", data);
+    return data;
+  } catch (err) {
+    console.error("Fetch error:", err);
+    return null;
+  }
+}
 
-// Check captcha
-fetch('http://localhost:5000/check_captcha', {
-  method: 'POST',
-  headers: { 'Content-Type': 'application/json' },
-  body: JSON.stringify({ id: 'some_id', answer: 'user_answer' })
-})
-  .then(res => res.json())
-  .then(data => console.log(data.result));
+
