@@ -1,6 +1,6 @@
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<string> {
+export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<boolean> {
   // Send the captchaResponse and locationID to your server for verification
   try {
     const response = await fetch('http://localhost:5000/check_captcha', {
@@ -9,8 +9,8 @@ export async function answerCaptcha(captchaResponse: string, locationID: string)
         'Content-Type': 'application/json',
       },
       body: JSON.stringify({
-        captchaResponse,
-        locationID,
+        id: locationID,
+        answer: captchaResponse,
       }),
     });
     if (!response.ok) {
@@ -19,10 +19,10 @@ export async function answerCaptcha(captchaResponse: string, locationID: string)
     const data = await response.json();
     console.log('Captcha check result:', data);
     // Adjust this depending on your backend's response structure
-    return data.result || "success";
+    return data.result === true;
   } catch (err) {
     console.error('Error checking captcha:', err);
-    return "error";
+    return false;
   }
 }
 

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Map from "./Map";
 import { answerCaptcha, getLocation } from "../functions/helperFunctions";
 
@@ -11,8 +11,19 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [code, setCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState<null | boolean>(null);
+  const [targetLocation, setTargetLocation] = useState<any | null>(null);
+  const [loading, setLoading] = useState(true);
 
-  
+  // On mount, fetch a random location
+  useEffect(() => {
+    async function fetchLocation() {
+      setLoading(true);
+      const loc = await getLocation(60.1878705, 24.8239767);
+      setTargetLocation(loc);
+      setLoading(false);
+    }
+    fetchLocation();
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -20,11 +31,14 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
     setSuccess(null);
 
     try {
-      // Use the location ID from the fetched targetLocation in state
-      const targetLocation = await getLocation(60.1878705, 24.8239767);
-      const locationID = targetLocation && (targetLocation.id || targetLocation.locationID || targetLocation._id || "");
+      if (!targetLocation) {
+        setSuccess(false);
+        return;
+      }
+      const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
       const result = await answerCaptcha(code, locationID);
-      if (result && typeof result === 'string' && result !== 'error') {
+      console.log("Captcha check result:", result);
+      if (result === true || result === "true") {
         setSuccess(true);
         setCode("");
         if (onSolved) onSolved(result);
@@ -41,7 +55,10 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
       <p>
         Go to the following location to get your code:
         <br />
-        <Map lat={60.1878705} lng={24.8239767} />
+        {loading && <span>Loading map...</span>}
+        {!loading && targetLocation && (
+          <Map lat={targetLocation.latitude} lng={targetLocation.longitude} />
+        )}
       </p>
       <form onSubmit={handleSubmit}>
         <label>
@@ -55,8 +72,8 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
         </label>
         <button type="submit">Submit Code</button>
       </form>
-  {submitted && success === true && <p style={{color: 'green'}}>Code accepted!</p>}
-  {submitted && success === false && <p style={{color: 'red'}}>Invalid code. Please try again.</p>}
+      {submitted && success === true && <p style={{color: 'green'}}>Code accepted!</p>}
+      {submitted && success === false && <p style={{color: 'red'}}>Invalid code. Please try again.</p>}
     </div>
   );
 };

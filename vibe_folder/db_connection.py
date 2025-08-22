@@ -21,7 +21,9 @@ def check_captcha(id, answer) -> bool:
     df = pd.read_csv(Path(__file__).parent.parent.resolve() / "database.txt")
     result = df.loc[df["id"] == id, "captcha"].eq(answer).any()
     # Convert numpy.bool_ to Python bool
+
     if hasattr(result, 'item'):
+
         result = result.item()
     return result
 
@@ -32,8 +34,9 @@ def api_get_captcha():
 @app.route("/check_captcha", methods=["POST"])
 def api_check_captcha():
     data = request.json
-    id = data.get("id")
-    answer = data.get("answer")
+    # Accept both old and new field names for compatibility
+    id = data.get("id") or data.get("locationID")
+    answer = data.get("answer") or data.get("captchaResponse")
     result = check_captcha(id, answer)
     return jsonify({"result": result})
 
