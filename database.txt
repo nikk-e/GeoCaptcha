@@ -1,2 +1,2 @@
 id,latitude,longitude,captcha
-001,60.189940,24.836811,bruh-face
+001,60.189940,24.836811,BRUH-FACE
