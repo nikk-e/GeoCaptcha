@@ -83,7 +83,7 @@ function App() {
           {loginResult === 'fail' && <div style={{color: 'red', marginTop: '1rem'}}>Login failed. Please try again.</div>}
         </>
       ) : loginResult === 'success' ? (
-        <div style={{color: 'green', fontWeight: 'bold', fontSize: '1.5rem', marginTop: '2rem'}}>Login successful!</div>
+        <div style={{color: 'lightgreen', fontWeight: 'bold', fontSize: '5rem', marginTop: '2rem'}}>Login successful!</div>
       ) : (
         <div>
           <Captcha onSolved={(code) => {
