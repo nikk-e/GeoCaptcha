@@ -109,13 +109,6 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
         <div className="recaptcha-branding">
           <span>Protected by GeoCaptcha</span>
         </div>
-        <button 
-          className="refresh-button"
-          onClick={handleRefresh}
-          title="Get new challenge"
-        >
-          🔄
-        </button>
       </div>
     </div>
   );
