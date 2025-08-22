@@ -57,6 +57,11 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
     setSuccess(null);
   };
 
+  const playClankerSound = () => {
+    const audio = new Audio("clanker_alarm.mp3");
+    audio.play();
+  };
+
   return (
     <div className="captcha-container">
       <div className="captcha-header">
@@ -134,7 +139,8 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
           )}
           
           {submitted && success === false && (
-            <div className="status-message status-error">
+            playClankerSound(),
+            <div className={"status-message status-error"}>
               ✗ Invalid verification code. Please check the code and try again.
             </div>
           )}
