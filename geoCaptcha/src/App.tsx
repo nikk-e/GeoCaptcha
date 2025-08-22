@@ -1,4 +1,3 @@
-
 import Captcha from './modules/Captcha'
 import "./App.css";
 
