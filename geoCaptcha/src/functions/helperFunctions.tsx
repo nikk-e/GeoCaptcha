@@ -1,11 +1,11 @@
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<boolean> {
+export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<string> {
   // Here you would typically send the captchaResponse to your server for verification
   console.log("Captcha answered:", captchaResponse, locationID);
   await sleep(1000); // Simulate network delay
-  return true;
+  return "success";
 }
 
 

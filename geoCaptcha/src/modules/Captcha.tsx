@@ -1,18 +1,33 @@
 import React, { useState } from "react";
 import Map from "./Map";
+import { answerCaptcha } from "../functions/helperFunctions";
 
 interface GeoCaptchaProps {
   location?: string;
+  onSolved?: (code: string) => void;
 }
 
-const Captcha: React.FC<GeoCaptchaProps> = () => {
+const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [code, setCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
+  const [success, setSuccess] = useState<null | boolean>(null);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setSubmitted(true);
-    // TODO: Validate code with backend
+    setSuccess(null);
+    try {
+      const result = await answerCaptcha(code, "locationID");
+      if (result && typeof result === 'string') {
+        setSuccess(true);
+        setCode("");
+        if (onSolved) onSolved(result);
+      } else {
+        setSuccess(false);
+      }
+    } catch {
+      setSuccess(false);
+    }
   };
 
   return (
@@ -34,7 +49,8 @@ const Captcha: React.FC<GeoCaptchaProps> = () => {
         </label>
         <button type="submit">Submit Code</button>
       </form>
-      {submitted && <p>Code submitted! (Validation not implemented)</p>}
+  {submitted && success === true && <p style={{color: 'green'}}>Code accepted!</p>}
+  {submitted && success === false && <p style={{color: 'red'}}>Invalid code. Please try again.</p>}
     </div>
   );
 };

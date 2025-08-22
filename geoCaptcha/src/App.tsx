@@ -50,7 +50,9 @@ function App() {
         </form>
       ) : (
         <div>
-          <Captcha />
+          <Captcha onSolved={(code) => {
+            console.log('Captcha solved with code:', code);
+          }} />
         </div>
       )}
     </div>
