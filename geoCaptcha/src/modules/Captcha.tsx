@@ -5,7 +5,7 @@ interface GeoCaptchaProps {
   location?: string;
 }
 
-const Captcha: React.FC<GeoCaptchaProps> = ({ location = "Huutisland" }) => {
+const Captcha: React.FC<GeoCaptchaProps> = () => {
   const [code, setCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
 
