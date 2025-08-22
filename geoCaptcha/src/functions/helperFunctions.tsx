@@ -1,7 +1,7 @@
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
-export async function answerCaptcha(captchaResponse: string, locationID: string): Promise<boolean> {
-  // Send the captchaResponse and locationID to your server for verification
+export async function answerCaptcha(oldCode: string, locationID: string, newCode: string): Promise<boolean> {
+  // Send the old and new code to your server for verification and update
   try {
     const response = await fetch('http://localhost:5000/check_captcha', {
       method: 'POST',
@@ -10,14 +10,14 @@ export async function answerCaptcha(captchaResponse: string, locationID: string)
       },
       body: JSON.stringify({
         id: locationID,
-        answer: captchaResponse.toLowerCase(),
+        old_code: oldCode,
+        new_code: newCode
       }),
     });
     if (!response.ok) {
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    // Adjust this depending on your backend's response structure
     return data.result === true;
   } catch (err) {
     console.error('Error checking captcha:', err);

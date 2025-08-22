@@ -9,7 +9,8 @@ interface GeoCaptchaProps {
 }
 
 const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
-  const [code, setCode] = useState("");
+  const [oldCode, setOldCode] = useState("");
+  const [newCode, setNewCode] = useState("");
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState<null | boolean>(null);
   const [targetLocation, setTargetLocation] = useState<any | null>(null);
@@ -29,7 +30,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!code.trim()) return;
+    if (!oldCode.trim() || !newCode.trim()) return;
 
     setSubmitted(true);
     setLoading(true);
@@ -38,10 +39,11 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
 
     try {
       const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
-      const result = await answerCaptcha(code, locationID);
+      const result = await answerCaptcha(oldCode, locationID, newCode);
       if (result) {
         setSuccess(true);
-        setCode("");
+        setOldCode("");
+        setNewCode("");
         if (onSolved) onSolved(String(result));
       } else {
         setSuccess(false);
@@ -56,7 +58,8 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   };
 
   const handleRefresh = () => {
-    setCode("");
+    setOldCode("");
+    setNewCode("");
     setSubmitted(false);
     setSuccess(null);
   };
@@ -112,16 +115,26 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
         <div className="input-section">
           <form onSubmit={handleSubmit}>
             <div className="code-input-group">
-              <label className="code-input-label" htmlFor="verification-code">
-                Enter verification code
+              <label className="code-input-label" htmlFor="old-code">
+                Enter current code and new code
               </label>
               <input
-                id="verification-code"
+                id="old-code"
                 className={`code-input ${success === false ? 'error' : ''}`}
                 type="text"
-                value={code}
-                onChange={(e) => setCode(e.target.value.toUpperCase())}
-                placeholder="XXXX-XXXX"
+                value={oldCode}
+                onChange={(e) => setOldCode(e.target.value.toUpperCase())}
+                placeholder="Current code"
+                maxLength={20}
+                required
+              />
+              <input
+                id="new-code"
+                className={`code-input ${success === false ? 'error' : ''}`}
+                type="text"
+                value={newCode}
+                onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                placeholder="New code"
                 maxLength={20}
                 required
               />
@@ -130,7 +143,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
             <button 
               type="submit" 
               className="submit-button"
-              disabled={!code.trim()}
+              disabled={!oldCode.trim() || !newCode.trim()}
             >
               Verify
             </button>

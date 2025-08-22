@@ -17,14 +17,17 @@ def get_captcha():
             d[k] = v.item()
     return d
 
-def check_captcha(id, answer) -> bool:
+def check_captcha(id, old_code, new_code) -> bool:
+    print(id, old_code, new_code)
     df = pd.read_csv(Path(__file__).parent.parent.resolve() / "database.txt")
-    result = df.loc[df["id"] == id, "captcha"].eq(answer).any()
-    # Convert numpy.bool_ to Python bool
 
+    result = df.loc[df["id"] == id, "captcha"].eq(old_code.lower()).any()
+    print(old_code.lower(), new_code.lower(), result)
     if hasattr(result, 'item'):
-
         result = result.item()
+    if result and new_code:
+        df.loc[df["id"] == id, "captcha"] = new_code.lower()
+        df.to_csv(Path(__file__).parent.parent.resolve() / "database.txt", index=False)
     return result
 
 @app.route("/get_captcha", methods=["GET"])
@@ -34,10 +37,11 @@ def api_get_captcha():
 @app.route("/check_captcha", methods=["POST"])
 def api_check_captcha():
     data = request.json
-    # Accept both old and new field names for compatibility
     id = data.get("id") or data.get("locationID")
-    answer = data.get("answer") or data.get("captchaResponse")
-    result = check_captcha(id, answer)
+    old_code = data.get("old_code")
+    new_code = data.get("new_code")
+    result = check_captcha(id, old_code, new_code)
+    print(f"Captcha check for ID {id} with old code '{old_code}' and new code '{new_code}': {result}")
     return jsonify({"result": result})
 
 @app.route("/get_random_coordinates", methods=["GET"])
