@@ -14,6 +14,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [success, setSuccess] = useState<null | boolean>(null);
   const [targetLocation, setTargetLocation] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
+  const [flashError, setFlashError] = useState(false);
 
   // On mount, fetch a random location
   useEffect(() => {
@@ -28,26 +29,29 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!code.trim()) return;
+
     setSubmitted(true);
+    setLoading(true);
     setSuccess(null);
+    setFlashError(false);
 
     try {
-      if (!targetLocation) {
-        setSuccess(false);
-        return;
-      }
       const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
       const result = await answerCaptcha(code, locationID);
-      console.log("Captcha check result:", result);
-      if (result === true) {
+      if (result) {
         setSuccess(true);
         setCode("");
         if (onSolved) onSolved(String(result));
       } else {
         setSuccess(false);
+        setFlashError(true);
       }
     } catch {
       setSuccess(false);
+      setFlashError(true);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -137,11 +141,10 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
               ✓ Verification successful! You may now proceed.
             </div>
           )}
-          
           {submitted && success === false && (
             playClankerSound(),
-            <div className={"status-message status-error"}>
-              ✗ Invalid verification code. Please check the code and try again.
+            <div className={`status-message status-error${flashError ? " flash" : ""}`}>
+              CLANKER DETECTED!
             </div>
           )}
         </div>
