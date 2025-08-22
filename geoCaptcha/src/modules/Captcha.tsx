@@ -38,11 +38,6 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
     }
   };
 
-  const handleRefresh = () => {
-    setCode("");
-    setSubmitted(false);
-    setSuccess(null);
-  };
 
   return (
     <div className="captcha-container">
