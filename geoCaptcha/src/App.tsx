@@ -37,7 +37,7 @@ function App() {
 
   return (
     <div className="app-Container">
-       <h1 className='Title'>Cool as hell App</h1>
+       {!loggedIn && <h1 className='Title'>Cool as hell App</h1>}
     <div className="app">
      
       {!loggedIn && loginResult !== 'success' ? (

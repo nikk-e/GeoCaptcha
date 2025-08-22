@@ -21,10 +21,10 @@ const Map = ({ lat, lng }: MapProps) => {
                 width: "100%",
                 borderRadius: "4px"
             }}
-            zoomControl={false}
-            scrollWheelZoom={false}
-            doubleClickZoom={false}
-            dragging={false}
+            zoomControl={true}
+            scrollWheelZoom={true}
+            doubleClickZoom={true}
+            dragging={true}
         >
             <TileLayer
                 url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
