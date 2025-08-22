@@ -1,12 +1,12 @@
-
+import './App.css'
+import Captcha from './modules/Captcha'
 
 function App() {
 
   return (
     <>
-      <div>
-        <p>Skibidi toilet</p>
-      </div>
+      <p>Skibidi toilet</p>
+      <Captcha />
     </>
   )
 }
