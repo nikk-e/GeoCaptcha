@@ -113,7 +113,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
                 value={code}
                 onChange={(e) => setCode(e.target.value.toUpperCase())}
                 placeholder="XXXX-XXXX"
-                maxLength={9}
+                maxLength={20}
                 required
               />
             </div>

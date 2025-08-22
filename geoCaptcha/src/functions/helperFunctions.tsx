@@ -10,7 +10,7 @@ export async function answerCaptcha(captchaResponse: string, locationID: string)
       },
       body: JSON.stringify({
         id: locationID,
-        answer: captchaResponse,
+        answer: captchaResponse.toLowerCase(),
       }),
     });
     if (!response.ok) {
