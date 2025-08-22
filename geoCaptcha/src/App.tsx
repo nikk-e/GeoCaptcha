@@ -1,4 +1,3 @@
-import './App.css'
 import Captcha from './modules/Captcha'
 
 function App() {
