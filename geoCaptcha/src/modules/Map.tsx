@@ -17,7 +17,7 @@ const Map = ({ lat, lng }: MapProps) => {
             center={center}
             zoom={17}
             style={{ 
-                height: "280px", 
+                height: "200px", 
                 width: "100%",
                 borderRadius: "4px"
             }}
