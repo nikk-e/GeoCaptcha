@@ -17,7 +17,6 @@ export async function answerCaptcha(captchaResponse: string, locationID: string)
       throw new Error('Network response was not ok');
     }
     const data = await response.json();
-    console.log('Captcha check result:', data);
     // Adjust this depending on your backend's response structure
     return data.result === true;
   } catch (err) {
@@ -42,7 +41,6 @@ export async function getLocation(lon: number, lat: number): Promise<any | null>
       return null;
     }
     const data = await response.json();
-    console.log("Response:", data);
     return data;
   } catch (err) {
     console.error("Fetch error:", err);

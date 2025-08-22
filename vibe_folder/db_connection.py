@@ -61,7 +61,6 @@ def api_get_random_coordinates():
     for k, v in random_coord.items():
         if hasattr(v, 'item'):
             random_coord[k] = v.item()
-    print(f"Returning random coordinate: {random_coord}")
     return jsonify(random_coord)
 
 if __name__ == "__main__":
