@@ -1,6 +1,15 @@
 .captcha-container {
   max-width: 400px;
-  margin: 20px auto;
+  margin: 0 auto;
+  background: white;
+  border: 1px solid #e0e0e0;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  font-family: -apple-system, BlinkMacSystemFont, 'Segue UI', 'Roboto', sans-serif;
+  overflow: hidden;
+}ontainer {
+  max-width: 400px;
+  margin: 10px auto;
   background: white;
   border: 1px solid #e0e0e0;
   border-radius: 8px;
@@ -12,7 +21,7 @@
 .captcha-header {
   background: #f8f9fa;
   border-bottom: 1px solid #e0e0e0;
-  padding: 16px 20px;
+  padding: 12px 16px;
   display: flex;
   align-items: center;
   gap: 12px;
@@ -39,30 +48,30 @@
 }
 
 .captcha-challenge {
-  padding: 20px;
+  padding: 16px;
 }
 
 .challenge-text {
   font-size: 14px;
   color: #3c4043;
-  margin: 0 0 16px 0;
+  margin: 0 0 12px 0;
   line-height: 1.4;
 }
 
 .challenge-instruction {
   font-weight: 500;
-  margin-bottom: 8px;
+  margin-bottom: 6px;
 }
 
 .map-container {
   border: 1px solid #dadce0;
   border-radius: 4px;
   overflow: hidden;
-  margin: 16px 0;
+  margin: 12px 0;
 }
 
 .input-section {
-  margin-top: 20px;
+  margin-top: 16px;
 }
 
 .code-input-group {
@@ -185,6 +194,6 @@
   .captcha-header,
   .captcha-challenge,
   .captcha-footer {
-    padding: 16px;
+    padding: 8px;
   }
 }
