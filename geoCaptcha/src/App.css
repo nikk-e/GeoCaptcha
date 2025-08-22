@@ -1,3 +1,25 @@
+
+.spinner {
+	margin: 2rem auto;
+	width: 60px;
+	height: 60px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+.spinner > div {
+	border: 6px solid #f3f3f3;
+	border-top: 6px solid #6cf;
+	border-radius: 50%;
+	width: 48px;
+	height: 48px;
+	animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+	0% { transform: rotate(0deg); }
+	100% { transform: rotate(360deg); }
+}
 .Title {
 	width: 100vw;
 	text-align: center;
