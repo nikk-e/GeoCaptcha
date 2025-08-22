@@ -38,10 +38,10 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
       const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
       const result = await answerCaptcha(code, locationID);
       console.log("Captcha check result:", result);
-      if (result === true || result === "true") {
+      if (result === true) {
         setSuccess(true);
         setCode("");
-        if (onSolved) onSolved(result);
+        if (onSolved) onSolved(String(result));
       } else {
         setSuccess(false);
       }
