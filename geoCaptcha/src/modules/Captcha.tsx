@@ -71,12 +71,17 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
     }
   };
 
-  const handleRefresh = () => {
-    setOldCode("");
-    setNewCode("");
-    setSubmitted(false);
-    setSuccess(null);
-  };
+const handleRefresh = async () => {
+  setOldCode("");
+  setNewCode("");
+  setSubmitted(false);
+  setSuccess(null);
+  setFlashError(false);
+  setLoading(true);
+  const loc = await getLocation(60.1878705, 24.8239767);
+  setTargetLocation(loc);
+  setLoading(false);
+};
 
   const playClankerSound = () => {
     const audio = new Audio("clanker_alarm.mp3");
