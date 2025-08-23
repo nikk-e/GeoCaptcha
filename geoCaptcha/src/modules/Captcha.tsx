@@ -221,123 +221,169 @@ const handleRefresh = async () => {
               <>
                 <div className="challenge-text">
                   <div className="challenge-instruction">
-                    Visit the location shown on the map to find a verification code.
+                    {!showPhotoMethod 
+                      ? "Visit the location shown on the map to find a verification code."
+                      : "Upload a photo from the location to verify your presence."
+                    }
                   </div>
-                    Once you arrive at the location, look at the hint below.
+                  {!showPhotoMethod 
+                    ? "Once you arrive at the location, look at the hint below."
+                    : "Take a clear photo showing identifiable landmarks from the target location."
+                  }
                 </div>
-                <div className="map-container">
-                  {loading ? (
-                    <div style={{ 
-                      height: "200px", 
-                      display: "flex", 
-                      alignItems: "center", 
-                      justifyContent: "center",
-                      background: "#f5f5f5",
-                      borderRadius: "4px"
-                    }}>
-                      Loading map...
+                
+                {!showPhotoMethod ? (
+                  <>
+                    <div className="map-container">
+                      {loading ? (
+                        <div style={{ 
+                          height: "200px", 
+                          display: "flex", 
+                          alignItems: "center", 
+                          justifyContent: "center",
+                          background: "#f5f5f5",
+                          borderRadius: "4px"
+                        }}>
+                          Loading map...
+                        </div>
+                      ) : targetLocation ? (
+                        <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
+                      ) : (
+                        <div style={{ 
+                          height: "200px", 
+                          display: "flex", 
+                          alignItems: "center", 
+                          justifyContent: "center",
+                          background: "#f5f5f5",
+                          borderRadius: "4px"
+                        }}>
+                          Map unavailable
+                        </div>
+                      )}
                     </div>
-                  ) : targetLocation ? (
-                    <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
-                  ) : (
-                    <div style={{ 
-                      height: "200px", 
-                      display: "flex", 
-                      alignItems: "center", 
-                      justifyContent: "center",
-                      background: "#f5f5f5",
-                      borderRadius: "4px"
-                    }}>
-                      Map unavailable
+                  
+                    <div>
+                      {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
+                        ? targetLocation.hint
+                        : "No hint available"}
                     </div>
-                  )}
+                  </>
+                ) : (
+                  <div className="photo-section">
+                    <div className="photo-upload-container">
+                      <input
+                        type="file"
+                        id="photo-upload"
+                        accept="image/*"
+                        onChange={handlePhotoUpload}
+                        style={{ display: 'none' }}
+                      />
+                      <label htmlFor="photo-upload" className="photo-upload-label">
+                        {photoPreview ? 'Change Photo' : 'Upload Location Photo'}
+                      </label>
+                      {photoPreview && (
+                        <div className="photo-preview">
+                          <img src={photoPreview} alt="Location" className="preview-image" />
+                        </div>
+                      )}
+                    </div>
                   </div>
-                  
-                <div>
-                  {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
-                    ? targetLocation.hint
-                    : "No hint available"}
-                </div>
-                  
-                <div className="photo-section">
-                  <div className="photo-upload-container">
-                    <input
-                      type="file"
-                      id="photo-upload"
-                      accept="image/*"
-                      onChange={handlePhotoUpload}
-                      style={{ display: 'none' }}
-                    />
-                    <label htmlFor="photo-upload" className="photo-upload-label">
-                      {photoPreview ? 'Change Photo' : 'Upload Location Photo'}
-                    </label>
-                    {photoPreview && (
-                      <div className="photo-preview">
-                        <img src={photoPreview} alt="Location" className="preview-image" />
-                      </div>
-                    )}
-                  </div>
-                </div>
+                )}
               </>
             )}
-            <div className="input-section">
-              <form onSubmit={handleSubmit}>
-                <div className="code-input-group">
-                  {!currentCodeVerified ? (
-                    <>
-                      <label className="code-input-label" htmlFor="old-code">
-                        Enter verification code
-                      </label>
-                      <input
-                        id="old-code"
-                        className={`code-input ${success === false ? 'error' : ''}`}
-                        type="text"
-                        value={oldCode}
-                        onChange={(e) => setOldCode(e.target.value.toUpperCase())}
-                        placeholder="Current code"
-                        maxLength={20}
-                        required
-                      />
-                    </>
-                  ) : (
-                    <>
-                      <label className="code-input-label" htmlFor="new-code">
-                        <p>To keep GeoCaptcha secure, we need you to write down a new verification code in this location for other users.</p>
-                        <p>Please write down a new code at the location and then enter it here.</p>
-                      </label>
-                      <input
-                        id="new-code"
-                        className={`code-input ${success === false ? 'error' : ''}`}
-                        type="text"
-                        value={newCode}
-                        onChange={(e) => setNewCode(e.target.value.toUpperCase())}
-                        placeholder="New code"
-                        maxLength={20}
-                        required
-                      />
-                    </>
-                  )}
+            
+            {!showPhotoMethod && (
+              <div className="input-section">
+                <form onSubmit={handleSubmit}>
+                  <div className="code-input-group">
+                    {!currentCodeVerified ? (
+                      <>
+                        <label className="code-input-label" htmlFor="old-code">
+                          Enter verification code
+                        </label>
+                        <input
+                          id="old-code"
+                          className={`code-input ${success === false ? 'error' : ''}`}
+                          type="text"
+                          value={oldCode}
+                          onChange={(e) => setOldCode(e.target.value.toUpperCase())}
+                          placeholder="Current code"
+                          maxLength={20}
+                          required
+                        />
+                      </>
+                    ) : (
+                      <>
+                        <label className="code-input-label" htmlFor="new-code">
+                          <p>To keep GeoCaptcha secure, we need you to write down a new verification code in this location for other users.</p>
+                          <p>Please write down a new code at the location and then enter it here.</p>
+                        </label>
+                        <input
+                          id="new-code"
+                          className={`code-input ${success === false ? 'error' : ''}`}
+                          type="text"
+                          value={newCode}
+                          onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                          placeholder="New code"
+                          maxLength={20}
+                          required
+                        />
+                      </>
+                    )}
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="submit-button"
+                    disabled={!currentCodeVerified ? !oldCode.trim() : !newCode.trim()}
+                  >
+                    {!currentCodeVerified ? "Verify Current Code" : "Submit New Code"}
+                  </button>
+                </form>
+                
+                {!currentCodeVerified && (
+                  <div className="method-toggle">
+                    <button 
+                      type="button"
+                      className="beta-method-button"
+                      onClick={() => setShowPhotoMethod(!showPhotoMethod)}
+                    >
+                      Try another method (beta)
+                    </button>
+                  </div>
+                )}
+                
+                {submitted && success === true && (
+                  <div className="status-message status-success">
+                    ✓ Verification successful! You may now proceed.
+                  </div>
+                )}
+                {submitted && success === false && (
+                  playClankerSound(),
+                  <div className={`status-message status-error${flashError ? " flash" : ""}`}>
+                    CLANKER DETECTED!
+                  </div>
+                )}
+              </div>
+            )}
+            
+            {showPhotoMethod && (
+              <div className="photo-method-section">
+                <div className="photo-instructions">
+                  <p>Upload a photo from the target location to verify your presence.</p>
+                  <p>The photo will be analyzed to confirm you are at the correct location.</p>
                 </div>
-                <button 
-                  type="submit" 
-                  className="submit-button"
-                  disabled={!currentCodeVerified ? !oldCode.trim() : !newCode.trim()}
-                >
-                  {!currentCodeVerified ? "Verify Current Code" : "Submit New Code"}
-                </button>
-              </form>
-              {submitted && success === true && (
-                <div className="status-message status-success">
-                  ✓ Verification successful! You may now proceed.
+                
+                <div className="method-toggle">
+                  <button 
+                    type="button"
+                    className="beta-method-button"
+                    onClick={() => setShowPhotoMethod(!showPhotoMethod)}
+                  >
+                    Use map method
+                  </button>
                 </div>
-              )}
-              {submitted && success === false && (
-                playClankerSound(),
-                <div className={`status-message status-error${flashError ? " flash" : ""}`}>
-                  CLANKER DETECTED!
-                </div>
-              )}
-            </div>
+              </div>
+            )}
           </div>
         </>
       )}
