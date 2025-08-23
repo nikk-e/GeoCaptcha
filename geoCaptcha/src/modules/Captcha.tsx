@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import Map from "./Map";
-import { answerCaptcha, getLocation } from "../functions/helperFunctions";
+import { answerCaptcha, getLocation, verifyPhoto } from "../functions/helperFunctions";
 import "./Captcha.css";
 
 interface GeoCaptchaProps {
@@ -31,6 +31,40 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
         setPhotoPreview(e.target?.result as string);
       };
       reader.readAsDataURL(file);
+    }
+  };
+
+  const handlePhotoSubmit = async () => {
+    if (!uploadedPhoto || !targetLocation) return;
+    
+    setLoading(true);
+    setSuccess(null);
+    setFlashError(false);
+    
+    try {
+      const result = await verifyPhoto(uploadedPhoto, { latitude: targetLocation.latitude, longitude: targetLocation.longitude });
+      
+      if (result.success) {
+        setSuccess(true);
+        setSubmitted(true);
+        setCurrentCodeVerified(true);
+        // Complete the captcha flow for photo verification
+        if (onSolved) {
+          onSolved("photo-verification-success");
+        }
+        console.log("Photo verification successful:", result.message);
+      } else {
+        setSuccess(false);
+        setSubmitted(true);
+        setFlashError(true);
+        console.log("Photo verification failed:", result.message);
+      }
+    } catch (error) {
+      setSuccess(false);
+      setFlashError(true);
+      console.error("Photo verification error:", error);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -71,7 +105,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
           });
           setLoading(false);
         },
-        (error) => {
+        () => {
           setLocationError('Failed to get location. Please allow location access and try again.');
           setLoading(false);
         }
@@ -286,6 +320,17 @@ const handleRefresh = async () => {
                           <img src={photoPreview} alt="Location" className="preview-image" />
                         </div>
                       )}
+                      {photoPreview && (
+                        <button 
+                          type="button"
+                          className="submit-button"
+                          onClick={handlePhotoSubmit}
+                          disabled={loading}
+                          style={{ marginTop: '12px' }}
+                        >
+                          {loading ? 'Analyzing Photo...' : 'Verify Photo'}
+                        </button>
+                      )}
                     </div>
                   </div>
                 )}
@@ -370,8 +415,19 @@ const handleRefresh = async () => {
               <div className="photo-method-section">
                 <div className="photo-instructions">
                   <p>Upload a photo from the target location to verify your presence.</p>
-                  <p>The photo will be analyzed to confirm you are at the correct location.</p>
+                  <p>The photo will be analyzed by AI to confirm you are at the correct location.</p>
                 </div>
+                
+                {submitted && success === true && (
+                  <div className="status-message status-success">
+                    ✓ Photo verification successful! AI confirmed your location.
+                  </div>
+                )}
+                {submitted && success === false && (
+                  <div className={`status-message status-error${flashError ? " flash" : ""}`}>
+                    ❌ Photo verification failed. AI could not confirm this location.
+                  </div>
+                )}
                 
                 <div className="method-toggle">
                   <button 

@@ -1,5 +1,11 @@
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms));
 
+interface VerificationResult {
+  success: boolean;
+  message: string;
+  confidence: number;
+}
+
 export async function answerCaptcha(oldCode: string, locationID: string, newCode: string): Promise<boolean> {
   // Send the old and new code to your server for verification and update
   try {
@@ -25,6 +31,37 @@ export async function answerCaptcha(oldCode: string, locationID: string, newCode
   }
 }
 
+export const verifyPhoto = async (file: File, targetCoordinates: { latitude: number; longitude: number }): Promise<VerificationResult> => {
+  try {
+    const formData = new FormData();
+    formData.append('photo', file);
+    formData.append('latitude', targetCoordinates.latitude.toString());
+    formData.append('longitude', targetCoordinates.longitude.toString());
+
+    const response = await fetch('http://localhost:5000/verify_photo', {
+      method: 'POST',
+      body: formData,
+    });
+
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+
+    const result = await response.json();
+    return {
+      success: result.success,
+      message: result.message,
+      confidence: result.confidence || 0
+    };
+  } catch (error) {
+    console.error('Photo verification error:', error);
+    return {
+      success: false,
+      message: 'Failed to verify photo. Please try again.',
+      confidence: 0
+    };
+  }
+};
 
 export async function login(user: { username: string; password: string; captchaResponse: string }): Promise<boolean> {
   await sleep(1000); // Simulate network delay
