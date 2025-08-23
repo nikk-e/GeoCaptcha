@@ -161,7 +161,11 @@ const handleRefresh = async () => {
               )}
             </div>
 
-            <div>{targetLocation.hint}</div>
+            <div>
+              {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
+                ? targetLocation.hint
+                : "No hint available"}
+            </div>
 
             <div className="photo-section">
               <div className="photo-upload-container">
