@@ -84,6 +84,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
           setTargetLocation(null);
           setLoading(false);
           // Do NOT setLocationStep(false); keep user on location step
+          // comment
           return;
         }
         setTargetLocation(loc);
