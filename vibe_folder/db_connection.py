@@ -18,11 +18,10 @@ def get_captcha():
     return d
 
 def check_captcha(id, old_code, new_code) -> bool:
-    print(id, old_code, new_code)
     df = pd.read_csv(Path(__file__).parent.parent.resolve() / "database.txt")
 
-    result = df.loc[df["id"] == id, "captcha"].eq(old_code.lower()).any()
-    print(old_code.lower(), new_code.lower(), result)
+    # Only works with numbers
+    result = df.loc[df["id"] == id, "captcha"].astype(str).eq(old_code.lower()).any()
     if hasattr(result, 'item'):
         result = result.item()
     if result and new_code:
@@ -41,7 +40,7 @@ def api_check_captcha():
     old_code = data.get("old_code")
     new_code = data.get("new_code")
     result = check_captcha(id, old_code, new_code)
-    print(f"Captcha check for ID {id} with old code '{old_code}' and new code '{new_code}': {result}")
+  
     return jsonify({"result": result})
 
 @app.route("/get_random_coordinates", methods=["GET"])
