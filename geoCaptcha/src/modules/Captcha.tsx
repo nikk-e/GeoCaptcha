@@ -343,7 +343,7 @@ const handleRefresh = async () => {
         <div className="recaptcha-branding">
           <span>Protected by GeoCaptcha</span>
         </div>
-        {targetLocation && (
+        {false && (
           <button 
             className="refresh-button"
             onClick={handleRefresh}
