@@ -52,7 +52,7 @@ def api_get_random_coordinates():
     except (TypeError, ValueError):
         return jsonify({"error": "Invalid or missing parameters"}), 400
 
-    max_distance = 500000000
+    max_distance = 5000
     df = pd.read_csv(Path(__file__).parent.parent.resolve() / "database.txt")
     df["distance"] = df.apply(lambda row: calculate_distance(lat, lon, row["latitude"], row["longitude"]), axis=1)
     suitable = df[(df["distance"] <= max_distance)]
