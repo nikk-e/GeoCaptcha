@@ -116,7 +116,7 @@ const handleRefresh = async () => {
               Loading map...
             </div>
           ) : targetLocation ? (
-            <Map lat={targetLocation.latitude} lng={targetLocation.longitude} />
+            <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
           ) : (
             <div style={{ 
               height: "200px", 

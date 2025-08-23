@@ -7,9 +7,10 @@ import "leaflet-defaulticon-compatibility/dist/leaflet-defaulticon-compatibility
 interface MapProps {
     lat: number;
     lng: number;
+    hint?: string;
 };
 
-const Map = ({ lat, lng }: MapProps) => {
+const Map = ({ lat, lng, hint }: MapProps) => {
     const center: LatLngExpression = [lat, lng];
     const mapKey = `${lat}-${lng}`; // Key changes when coordinates change, forcing refresh
 
@@ -38,6 +39,10 @@ const Map = ({ lat, lng }: MapProps) => {
                         🎯 Verification Location
                         <br />
                         <small>Find the code here</small>
+                         <br />
+                        <small>Hint: {hint || "No hint available"}</small>
+                         <br />
+                         <small>Coordinates: {lat}, {lng}</small>
                     </div>
                 </Popup>
             </Marker>
