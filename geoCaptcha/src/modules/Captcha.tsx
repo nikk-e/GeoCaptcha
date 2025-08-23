@@ -11,6 +11,7 @@ interface GeoCaptchaProps {
 const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [oldCode, setOldCode] = useState("");
   const [newCode, setNewCode] = useState("");
+  const [currentCodeVerified, setCurrentCodeVerified] = useState(false);
   const [submitted, setSubmitted] = useState(false);
   const [success, setSuccess] = useState<null | boolean>(null);
   const [targetLocation, setTargetLocation] = useState<any | null>(null);
@@ -44,36 +45,63 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!oldCode.trim() || !newCode.trim()) return;
+    
+    if (!currentCodeVerified) {
+      // First step: verify current code
+      if (!oldCode.trim()) return;
+      
+      setSubmitted(true);
+      setLoading(true);
+      setSuccess(null);
+      setFlashError(false);
 
-    setSubmitted(true);
-    setLoading(true);
-    setSuccess(null);
-    setFlashError(false);
-
-    try {
-      const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
-      const result = await answerCaptcha(oldCode, locationID, newCode);
-      if (result) {
-        setSuccess(true);
-        setOldCode("");
-        setNewCode("");
-        if (onSolved) onSolved(String(result));
-      } else {
+      try {
+        const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
+        // Just verify the old code first
+        const result = await answerCaptcha(oldCode, locationID, "");
+        if (result) {
+          setCurrentCodeVerified(true);
+          setSuccess(true);
+        } else {
+          setSuccess(false);
+          setFlashError(true);
+        }
+      } catch {
         setSuccess(false);
         setFlashError(true);
+      } finally {
+        setLoading(false);
       }
-    } catch {
-      setSuccess(false);
-      setFlashError(true);
-    } finally {
-      setLoading(false);
+    } else {
+      // Second step: submit new code
+      if (!newCode.trim()) return;
+      
+      setLoading(true);
+      try {
+        const locationID = targetLocation.id || targetLocation.locationID || targetLocation._id || "";
+        const result = await answerCaptcha(oldCode, locationID, newCode);
+        if (result) {
+          setSuccess(true);
+          setOldCode("");
+          setNewCode("");
+          if (onSolved) onSolved(String(result));
+        } else {
+          setSuccess(false);
+          setFlashError(true);
+        }
+      } catch {
+        setSuccess(false);
+        setFlashError(true);
+      } finally {
+        setLoading(false);
+      }
     }
   };
 
 const handleRefresh = async () => {
   setOldCode("");
   setNewCode("");
+  setCurrentCodeVerified(false);
   setSubmitted(false);
   setSuccess(null);
   setFlashError(false);
@@ -96,95 +124,109 @@ const handleRefresh = async () => {
       </div>
       
       <div className="captcha-challenge">
-        <div className="challenge-text">
-          <div className="challenge-instruction">
-            Visit the location shown on the map and find the verification code
-          </div>
-          Look for a QR code or sign with your unique verification code at this location.
-        </div>
-        
-        <div className="map-container">
-          {loading ? (
-            <div style={{ 
-              height: "200px", 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center",
-              background: "#f5f5f5",
-              borderRadius: "4px"
-            }}>
-              Loading map...
-            </div>
-          ) : targetLocation ? (
-            <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
-          ) : (
-            <div style={{ 
-              height: "200px", 
-              display: "flex", 
-              alignItems: "center", 
-              justifyContent: "center",
-              background: "#f5f5f5",
-              borderRadius: "4px"
-            }}>
-              Map unavailable
-            </div>
-          )}
-        </div>
-        
-        <div className="photo-section">
-          <div className="photo-upload-container">
-            <input
-              type="file"
-              id="photo-upload"
-              accept="image/*"
-              onChange={handlePhotoUpload}
-              style={{ display: 'none' }}
-            />
-            <label htmlFor="photo-upload" className="photo-upload-label">
-              {photoPreview ? 'Change Photo' : 'Upload Location Photo'}
-            </label>
-            {photoPreview && (
-              <div className="photo-preview">
-                <img src={photoPreview} alt="Location" className="preview-image" />
+        {!currentCodeVerified && (
+          <>
+            <div className="challenge-text">
+              <div className="challenge-instruction">
+                Visit the location shown on the map and find the verification code
               </div>
-            )}
-          </div>
-        </div>
+              Look for a QR code or sign with your unique verification code at this location.
+            </div>
+            
+            <div className="map-container">
+              {loading ? (
+                <div style={{ 
+                  height: "200px", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  background: "#f5f5f5",
+                  borderRadius: "4px"
+                }}>
+                  Loading map...
+                </div>
+              ) : targetLocation ? (
+                <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
+              ) : (
+                <div style={{ 
+                  height: "200px", 
+                  display: "flex", 
+                  alignItems: "center", 
+                  justifyContent: "center",
+                  background: "#f5f5f5",
+                  borderRadius: "4px"
+                }}>
+                  Map unavailable
+                </div>
+              )}
+            </div>
+            
+            <div className="photo-section">
+              <div className="photo-upload-container">
+                <input
+                  type="file"
+                  id="photo-upload"
+                  accept="image/*"
+                  onChange={handlePhotoUpload}
+                  style={{ display: 'none' }}
+                />
+                <label htmlFor="photo-upload" className="photo-upload-label">
+                  {photoPreview ? 'Change Photo' : 'Upload Location Photo'}
+                </label>
+                {photoPreview && (
+                  <div className="photo-preview">
+                    <img src={photoPreview} alt="Location" className="preview-image" />
+                  </div>
+                )}
+              </div>
+            </div>
+          </>
+        )}
         
         <div className="input-section">
           <form onSubmit={handleSubmit}>
             <div className="code-input-group">
-              <label className="code-input-label" htmlFor="old-code">
-                Enter current code and new code
-              </label>
-              <input
-                id="old-code"
-                className={`code-input ${success === false ? 'error' : ''}`}
-                type="text"
-                value={oldCode}
-                onChange={(e) => setOldCode(e.target.value.toUpperCase())}
-                placeholder="Current code"
-                maxLength={20}
-                required
-              />
-              <input
-                id="new-code"
-                className={`code-input ${success === false ? 'error' : ''}`}
-                type="text"
-                value={newCode}
-                onChange={(e) => setNewCode(e.target.value.toUpperCase())}
-                placeholder="New code"
-                maxLength={20}
-                required
-              />
+              {!currentCodeVerified ? (
+                <>
+                  <label className="code-input-label" htmlFor="old-code">
+                    Enter the current code from the location
+                  </label>
+                  <input
+                    id="old-code"
+                    className={`code-input ${success === false ? 'error' : ''}`}
+                    type="text"
+                    value={oldCode}
+                    onChange={(e) => setOldCode(e.target.value.toUpperCase())}
+                    placeholder="Current code"
+                    maxLength={20}
+                    required
+                  />
+                </>
+              ) : (
+                <>
+                  <label className="code-input-label" htmlFor="new-code">
+                    Enter your new code to place at this location
+                  </label>
+                  <input
+                    id="new-code"
+                    className={`code-input ${success === false ? 'error' : ''}`}
+                    type="text"
+                    value={newCode}
+                    onChange={(e) => setNewCode(e.target.value.toUpperCase())}
+                    placeholder="New code"
+                    maxLength={20}
+                    required
+                  />
+                </>
+              )}
             </div>
             
             <button 
               type="submit" 
               className="submit-button"
-              disabled={!oldCode.trim() || !newCode.trim()}
+              disabled={!currentCodeVerified ? !oldCode.trim() : !newCode.trim()}
             >
-              Verify
+              {!currentCodeVerified ? "Verify Current Code" : "Submit New Code"}
             </button>
           </form>
           
