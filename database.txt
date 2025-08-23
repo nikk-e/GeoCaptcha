@@ -1,5 +1,2 @@
 id,latitude,longitude,captcha,hint
-1,60.18994,24.836811,11111111,The cache is under a rock near the statue.
-2,60.1884444,24.8364722,22222222,The cache is under a rock near the the benches
-3,60.1933056,24.8381111,33333333,The cache is under the bench
-4,60.18575,24.8274444,44444444, The Cache is on top of the stairs
+1,60.18710895454676,24.822634390625737,11111111,Look under the nearest tree

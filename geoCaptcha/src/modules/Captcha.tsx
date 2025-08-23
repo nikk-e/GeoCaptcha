@@ -353,7 +353,7 @@ const handleRefresh = async () => {
                           type="text"
                           value={oldCode}
                           onChange={(e) => setOldCode(e.target.value.toUpperCase())}
-                          placeholder="Current code"
+                          placeholder="Verification code"
                           maxLength={20}
                           required
                         />
@@ -382,7 +382,7 @@ const handleRefresh = async () => {
                     className="submit-button"
                     disabled={!currentCodeVerified ? !oldCode.trim() : !newCode.trim()}
                   >
-                    {!currentCodeVerified ? "Verify Current Code" : "Submit New Code"}
+                    {!currentCodeVerified ? "Verify Code" : "Submit New Code"}
                   </button>
                 </form>
                 
@@ -425,8 +425,9 @@ const handleRefresh = async () => {
                   </div>
                 )}
                 {submitted && success === false && (
+                  playClankerSound(),
                   <div className={`status-message status-error${flashError ? " flash" : ""}`}>
-                    ❌ Photo verification failed. AI could not confirm this location.
+                     CLANKER DETECTED!
                   </div>
                 )}
                 
