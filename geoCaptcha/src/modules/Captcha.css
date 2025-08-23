@@ -61,6 +61,19 @@
   margin: 12px 0;
 }
 
+.location-hint {
+  background: #f8f9fa;
+  border: 1px solid #e8eaed;
+  border-radius: 4px;
+  padding: 12px;
+  margin: 8px 0 16px 0;
+  font-size: 14px;
+  color: #5f6368;
+  line-height: 1.4;
+  font-style: italic;
+  text-align: center;
+}
+
 .input-section {
   margin-top: 16px;
 }

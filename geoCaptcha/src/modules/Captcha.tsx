@@ -267,42 +267,46 @@ const handleRefresh = async () => {
                   }
                 </div>
                 
+                {/* Map is always shown for both verification methods */}
+                <div className="map-container">
+                  {loading ? (
+                    <div style={{ 
+                      height: "200px", 
+                      display: "flex", 
+                      alignItems: "center", 
+                      justifyContent: "center",
+                      background: "#f5f5f5",
+                      borderRadius: "4px"
+                    }}>
+                      Loading map...
+                    </div>
+                  ) : targetLocation ? (
+                    <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
+                  ) : (
+                    <div style={{ 
+                      height: "200px", 
+                      display: "flex", 
+                      alignItems: "center", 
+                      justifyContent: "center",
+                      background: "#f5f5f5",
+                      borderRadius: "4px"
+                    }}>
+                      Map unavailable
+                    </div>
+                  )}
+                </div>
+                
+                {/* Hint is always shown for both verification methods */}
+                <div className="location-hint">
+                  {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
+                    ? targetLocation.hint
+                    : "No hint available"}
+                </div>
+
                 {!showPhotoMethod ? (
-                  <>
-                    <div className="map-container">
-                      {loading ? (
-                        <div style={{ 
-                          height: "200px", 
-                          display: "flex", 
-                          alignItems: "center", 
-                          justifyContent: "center",
-                          background: "#f5f5f5",
-                          borderRadius: "4px"
-                        }}>
-                          Loading map...
-                        </div>
-                      ) : targetLocation ? (
-                        <Map lat={targetLocation.latitude} lng={targetLocation.longitude} hint={targetLocation.hint} />
-                      ) : (
-                        <div style={{ 
-                          height: "200px", 
-                          display: "flex", 
-                          alignItems: "center", 
-                          justifyContent: "center",
-                          background: "#f5f5f5",
-                          borderRadius: "4px"
-                        }}>
-                          Map unavailable
-                        </div>
-                      )}
-                    </div>
-                  
-                    <div>
-                      {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
-                        ? targetLocation.hint
-                        : "No hint available"}
-                    </div>
-                  </>
+                  <div className="map-verification-section">
+                    {/* Map verification specific content can go here if needed */}
+                  </div>
                 ) : (
                   <div className="photo-section">
                     <div className="photo-upload-container">
@@ -415,8 +419,8 @@ const handleRefresh = async () => {
             {showPhotoMethod && (
               <div className="photo-method-section">
                 <div className="photo-instructions">
-                  <p>Upload a photo from the target location to verify your presence.</p>
-                  <p>The photo will be analyzed by AI to confirm you are at the correct location.</p>
+                  <p>Reference the map above and upload a photo from the target location to verify your presence.</p>
+                  <p>The photo will be analyzed by AI to confirm you are at the correct location shown on the map.</p>
                 </div>
                 
                 {submitted && success === true && (
