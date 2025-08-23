@@ -219,9 +219,9 @@ const handleRefresh = async () => {
               <>
                 <div className="challenge-text">
                   <div className="challenge-instruction">
-                    Visit the location shown on the map and find the verification code
+                    Visit the location shown on the map to find a verification code.
                   </div>
-                  Look for a QR code or sign with your unique verification code at this location.
+                    Once you arrive at the location, look at the hint below.
                 </div>
                 <div className="map-container">
                   {loading ? (
@@ -249,7 +249,14 @@ const handleRefresh = async () => {
                       Map unavailable
                     </div>
                   )}
+                  </div>
+                  
+                <div>
+                  {targetLocation && targetLocation.hint != null && targetLocation.hint !== ""
+                    ? targetLocation.hint
+                    : "No hint available"}
                 </div>
+                  
                 <div className="photo-section">
                   <div className="photo-upload-container">
                     <input
@@ -277,7 +284,7 @@ const handleRefresh = async () => {
                   {!currentCodeVerified ? (
                     <>
                       <label className="code-input-label" htmlFor="old-code">
-                        Enter the current code from the location
+                        Enter verification code
                       </label>
                       <input
                         id="old-code"
@@ -293,7 +300,8 @@ const handleRefresh = async () => {
                   ) : (
                     <>
                       <label className="code-input-label" htmlFor="new-code">
-                        Enter your new code to place at this location
+                        <p>To keep GeoCaptcha secure, we need you to write down a new verification code in this location for other users.</p>
+                        <p>Please write down a new code at the location and then enter it here.</p>
                       </label>
                       <input
                         id="new-code"
