@@ -128,9 +128,9 @@ const handleRefresh = async () => {
           <>
             <div className="challenge-text">
               <div className="challenge-instruction">
-                Visit the location shown on the map and find the verification code
+                Visit the location shown on the map to find a verification code.
               </div>
-              Look for a QR code or sign with your unique verification code at this location.
+              Once you arrive at the location, look at the hint below.
             </div>
             
             <div className="map-container">
@@ -160,7 +160,9 @@ const handleRefresh = async () => {
                 </div>
               )}
             </div>
-            
+
+            <div>{targetLocation.hint}</div>
+
             <div className="photo-section">
               <div className="photo-upload-container">
                 <input
@@ -189,7 +191,7 @@ const handleRefresh = async () => {
               {!currentCodeVerified ? (
                 <>
                   <label className="code-input-label" htmlFor="old-code">
-                    Enter the current code from the location
+                    Enter the verification code.
                   </label>
                   <input
                     id="old-code"
@@ -197,7 +199,7 @@ const handleRefresh = async () => {
                     type="text"
                     value={oldCode}
                     onChange={(e) => setOldCode(e.target.value.toUpperCase())}
-                    placeholder="Current code"
+                    placeholder="Verification code"
                     maxLength={20}
                     required
                   />
@@ -226,7 +228,7 @@ const handleRefresh = async () => {
               className="submit-button"
               disabled={!currentCodeVerified ? !oldCode.trim() : !newCode.trim()}
             >
-              {!currentCodeVerified ? "Verify Current Code" : "Submit New Code"}
+              {!currentCodeVerified ? "Verify" : "Submit New Code"}
             </button>
           </form>
           

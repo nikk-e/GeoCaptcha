@@ -1,4 +1,6 @@
-# geoCaptcha
+Submission for Junction Stupid Hack 2025, so the code may be a little stupid :D.
+
+# GeoCaptcha
 
 An interactive full-stack captcha demo using a Python/Flask backend and a React/TypeScript frontend.
 
