@@ -20,6 +20,7 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [flashError, setFlashError] = useState(false);
   const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
   const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+  const [showPhotoMethod, setShowPhotoMethod] = useState(false);
 
   const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
@@ -144,6 +145,7 @@ const handleRefresh = async () => {
   setSubmitted(false);
   setSuccess(null);
   setFlashError(false);
+  setShowPhotoMethod(false);
   setLoading(true);
   const loc = await getLocation(60.1878705, 24.8239767);
   setTargetLocation(loc);
