@@ -211,7 +211,8 @@ const handleRefresh = async () => {
               ) : (
                 <>
                   <label className="code-input-label" htmlFor="new-code">
-                    Enter your new code to place at this location
+                      <p>To keep GeoCaptcha secure, we need you to write down a new verification code in this location for other users.</p>
+                      <p>Please write down a new code at the location and then enter it here.</p>
                   </label>
                   <input
                     id="new-code"
