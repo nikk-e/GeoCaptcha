@@ -48,3 +48,6 @@ coverage/
 *.swo
 *.bak
 *.orig
+
+# Photos folder - contains uploaded captcha photos
+photos/

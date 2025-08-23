@@ -231,3 +231,48 @@
     padding: 8px;
   }
 }
+
+/* Photo Upload Styles */
+.photo-section {
+  margin: 16px 0;
+  padding: 16px;
+  border-top: 1px solid #e0e0e0;
+  background: #f9f9f9;
+}
+
+.photo-upload-container {
+  text-align: center;
+}
+
+.photo-upload-label {
+  display: inline-block;
+  padding: 8px 16px;
+  background: #4285f4;
+  color: white;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  transition: background-color 0.2s ease;
+  border: none;
+}
+
+.photo-upload-label:hover {
+  background: #3367d6;
+}
+
+.photo-preview {
+  margin-top: 12px;
+  border-radius: 8px;
+  overflow: hidden;
+  display: inline-block;
+  border: 2px solid #e0e0e0;
+}
+
+.preview-image {
+  max-width: 100%;
+  max-height: 200px;
+  width: auto;
+  height: auto;
+  display: block;
+}

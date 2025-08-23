@@ -16,6 +16,20 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
   const [targetLocation, setTargetLocation] = useState<any | null>(null);
   const [loading, setLoading] = useState(true);
   const [flashError, setFlashError] = useState(false);
+  const [uploadedPhoto, setUploadedPhoto] = useState<File | null>(null);
+  const [photoPreview, setPhotoPreview] = useState<string | null>(null);
+
+  const handlePhotoUpload = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      setUploadedPhoto(file);
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setPhotoPreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
 
   // On mount, fetch a random location
   useEffect(() => {
@@ -110,6 +124,26 @@ const Captcha: React.FC<GeoCaptchaProps> = ({ onSolved }) => {
               Map unavailable
             </div>
           )}
+        </div>
+        
+        <div className="photo-section">
+          <div className="photo-upload-container">
+            <input
+              type="file"
+              id="photo-upload"
+              accept="image/*"
+              onChange={handlePhotoUpload}
+              style={{ display: 'none' }}
+            />
+            <label htmlFor="photo-upload" className="photo-upload-label">
+              {photoPreview ? 'Change Photo' : 'Upload Location Photo'}
+            </label>
+            {photoPreview && (
+              <div className="photo-preview">
+                <img src={photoPreview} alt="Location" className="preview-image" />
+              </div>
+            )}
+          </div>
         </div>
         
         <div className="input-section">
