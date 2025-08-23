@@ -1,0 +1,5 @@
+id,latitude,longitude,captcha,hint
+1,60.18994,24.836811,bruh-face,Face here?
+2,60.1884444,24.8364722,smögelsön,Builing her?
+3,60.1933056,24.8381111,niemenkärki,where are you?
+4,60.18575,24.8274444,amfi,Place?
