@@ -11,9 +11,11 @@ interface MapProps {
 
 const Map = ({ lat, lng }: MapProps) => {
     const center: LatLngExpression = [lat, lng];
+    const mapKey = `${lat}-${lng}`; // Key changes when coordinates change, forcing refresh
 
     return (
         <MapContainer
+            key={mapKey}
             center={center}
             zoom={17}
             style={{ 
